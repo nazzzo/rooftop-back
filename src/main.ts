@@ -16,6 +16,6 @@ async function bootstrap() {
   
   await app.listen(3005)
 
-  console.log(`server on 3005`)
+  console.log(`server on 3005!`)
 }
 bootstrap();
