@@ -16,7 +16,10 @@ import { FileModule } from './file/file.module';
       envFilePath: ".env",
       isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.DB_URI),
+    MongooseModule.forRoot(process.env.DB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }),
     BookModule,
     AuthModule,
     CollectionModule,
