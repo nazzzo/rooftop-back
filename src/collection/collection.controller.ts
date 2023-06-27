@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CollectionDto } from './dto/collection.dto';
 import { Collection } from './schemas/collection.schema';
@@ -32,5 +32,11 @@ export class CollectionController {
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.CONFLICT);
         }
+    }
+
+    @Put('/update')
+    async updateUser(@Body() updateProps ): Promise<Collection> {
+        console.log(updateProps)
+        return this.collectionService.update(updateProps)
     }
 }

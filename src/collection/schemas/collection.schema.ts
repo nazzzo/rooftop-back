@@ -26,8 +26,11 @@ export class Collection {
     @Prop()
     creatorFee: string;
 
-    // @Prop()
-    // floorPrice: string;
+    @Prop()
+    floorPrice: number;
+
+    @Prop()
+    totalVolume: number;
 
 
     @Prop()

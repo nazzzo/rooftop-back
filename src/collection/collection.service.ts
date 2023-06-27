@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Collection } from './schemas/collection.schema';
@@ -52,5 +52,17 @@ export class CollectionService {
         console.log(newCollection)
 
         return newCollection
+    }
+
+    async update(updateProps) {
+        const { address, ...updateData } = updateProps
+        console.log(updateProps)
+        const collection = await this.collectionModel.findOne({ address });
+        if (!collection) {
+            throw  new UnauthorizedException('collection not found')
+        }
+
+        const updateCollection = await this.collectionModel.findOneAndUpdate({ address: address }, updateData)
+        return updateCollection
     }
 }
