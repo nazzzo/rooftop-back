@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { CollectionModule } from './collection/collection.module';
 import { FileModule } from './file/file.module';
+import { EventModule } from './event/event.module';
 
 
 @Module({
@@ -16,7 +17,7 @@ import { FileModule } from './file/file.module';
       envFilePath: ".env",
       isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.DB_URI, {
+    MongooseModule.forRoot((process.env.DB_URI || '"mongodb+srv://root:root@cluster0.virefkw.mongodb.net/?retryWrites=true&w=majority'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }),
@@ -24,6 +25,7 @@ import { FileModule } from './file/file.module';
     AuthModule,
     CollectionModule,
     FileModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
