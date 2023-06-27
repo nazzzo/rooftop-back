@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CollectionService {
+
     constructor(
         @InjectModel(Collection.name)
         private collectionModel: mongoose.Model<Collection>,
@@ -29,6 +30,7 @@ export class CollectionService {
         } catch (e) {
             throw new Error(e);
         }
+
     }
   }
 
