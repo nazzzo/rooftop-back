@@ -16,8 +16,9 @@ export class CollectionService {
 
     async getCollection(address: string): Promise<Collection[]> {
         try {
-            const collection = await this.collectionModel.find({ creator: address });
-            console.log(`get collection::: ${collection}`);
+            console.log(address)
+            const collection = await this.collectionModel.find({ $or: [{ creator: address }, { address }] });
+            console.log(`get collection:: ${collection}`);
             if (!collection) {
                 throw new NotFoundException('Collection not found');
             }
