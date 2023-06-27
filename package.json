@@ -6,8 +6,6 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prestart:prod": "rimraf dist && npm run build",
-    "web": "npm run start:prod",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -19,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "start:prod": "node dist/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^9.4.3",
@@ -29,7 +28,6 @@
     "@nestjs/mongoose": "^9.2.2",
     "@nestjs/platform-express": "^9.4.2",
     "@vendia/serverless-express": "^4.10.4",
-    "aws-lambda": "^1.0.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "mongoose": "^7.2.2",

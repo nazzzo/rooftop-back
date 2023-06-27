@@ -11,24 +11,26 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CollectionService {
-  constructor(
-    @InjectModel(Collection.name)
-    private collectionModel: mongoose.Model<Collection>,
-    private configService: ConfigService,
-  ) {}
 
-  async getCollection(address: string): Promise<Collection[]> {
-    try {
-      const collection = await this.collectionModel.find({
-        $or: [{ creator: address }, { address }],
-      });
-      console.log(`get collection::: ${collection}`);
-      if (!collection) {
-        throw new NotFoundException('Collection not found');
-      }
-      return collection;
-    } catch (e) {
-      throw new Error(e);
+    constructor(
+        @InjectModel(Collection.name)
+        private collectionModel: mongoose.Model<Collection>,
+        private configService: ConfigService
+    ) { }
+
+    async getCollection(address: string): Promise<Collection[]> {
+        try {
+            console.log(address)
+            const collection = await this.collectionModel.find({ $or: [{ creator: address }, { address }] });
+            console.log(`get collection:: ${collection}`);
+            if (!collection) {
+                throw new NotFoundException('Collection not found');
+            }
+            return collection;
+        } catch (e) {
+            throw new Error(e);
+        }
+
     }
   }
 
