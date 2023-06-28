@@ -32,6 +32,8 @@ export class Collection {
     @Prop()
     totalVolume: number;
 
+    @Prop()
+    verified: boolean;
 
     @Prop()
     logo: string;

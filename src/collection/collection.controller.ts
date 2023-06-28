@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CollectionDto } from './dto/collection.dto';
 import { Collection } from './schemas/collection.schema';
@@ -6,6 +6,15 @@ import { Collection } from './schemas/collection.schema';
 @Controller('collection')
 export class CollectionController {
     constructor(private collectionService: CollectionService) { }
+
+    @Get()
+    async getAllCollections():Promise<Collection[]>{
+        try{
+            return await this.collectionService.getAllCollections()
+        }catch(error){
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 
     @Get(':address')
     async getCollection(@Param('address') address: string): Promise<Collection[]> {

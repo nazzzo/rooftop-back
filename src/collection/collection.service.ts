@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Query, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Collection } from './schemas/collection.schema';
@@ -13,6 +13,7 @@ export class CollectionService {
         private collectionModel: mongoose.Model<Collection>,
         private configService: ConfigService
     ) { }
+    
 
     async getCollection(address: string): Promise<Collection[]> {
         try {
@@ -27,6 +28,24 @@ export class CollectionService {
             throw new Error(e);
         }
     }
+
+    async getAllCollections(): Promise<Collection[]> {
+        try {
+            const getCollections = await this.collectionModel.find().exec()
+    
+            if(!getCollections){
+                throw new NotFoundException('Collection not found')
+            }
+    
+            console.log("service Collections : " , getCollections)
+    
+            return getCollections
+          }
+         catch (e) {
+          throw new Error(e);
+        }
+      }
+
 
     async find(body: CollectionDto): Promise<Collection> {
         try {
