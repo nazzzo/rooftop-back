@@ -5,6 +5,10 @@ import * as mongoose from 'mongoose';
 import { Event } from './schemas/event.schema';
 import { EventDto } from './dto/event.dto';
 
+interface Query {
+    time?: number;
+    event?: string;
+}
 
 @Injectable()
 export class EventService {
@@ -12,8 +16,39 @@ export class EventService {
         @InjectModel(Event.name)
         private eventModel: mongoose.Model<Event>,
         private configService: ConfigService
-    ) {}
-    
+    ) { }
+
+    async findAll(query: Query) {
+        console.log(query)
+        try {
+            if (query.time && query.event) {
+                const currentTime = new Date();
+                const timeAgo = new Date(currentTime.getTime() - query.time * 60 * 60 * 1000); // 1시간
+
+                const events = await this.eventModel.find({
+                    createdAt: {
+                        $gte: timeAgo,
+                        $lte: currentTime
+                    },
+                    event : query.event
+                }).exec();
+                if (!events || events.length === 0) {
+                    throw new NotFoundException('Event not found');
+                }
+                return events;
+            }
+
+            const events = await this.eventModel.find().exec();
+            if (!events || events.length === 0) {
+                throw new NotFoundException('Event not found');
+            }
+            return events;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+
+
     async findById(id) {
         try {
             const events = await this.eventModel.find({ id });
