@@ -28,6 +28,7 @@ export class CollectionService {
       return collection;
     } catch (e) {
       throw new Error(e);
+
     }
   }
 
@@ -61,6 +62,7 @@ export class CollectionService {
         } catch (e) {
             throw new Error(e);
         }
+
     }
 
     async create(collectionDto: CollectionDto): Promise<Collection> {
