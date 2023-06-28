@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length, Matches } from "class-validator"
+import { IsBoolean, IsNotEmpty, IsNumber, IsString, Length, Matches } from "class-validator"
 
 export class CollectionDto {
     @IsNotEmpty()
@@ -25,6 +25,18 @@ export class CollectionDto {
     @IsNotEmpty()
     @IsString()
     readonly creatorFee: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    floorPrice: number;
+
+    @IsNotEmpty()
+    @IsNumber()
+    totalVolume: number;
+
+    @IsNotEmpty()
+    @IsBoolean()
+    verified: boolean;
 
     // @IsNotEmpty()
     @IsString()
