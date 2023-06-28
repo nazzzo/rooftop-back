@@ -7,6 +7,16 @@ import { Collection } from './schemas/collection.schema';
 export class CollectionController {
     constructor(private collectionService: CollectionService) { }
 
+    @Get()
+    async getAllCollections():Promise<Collection[]>{
+        try{
+            return await this.collectionService.getAllCollections()
+        }catch(error){
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+
     @Get(':address')
     async getCollection(@Param('address') address: string): Promise<Collection[]> {
         try {

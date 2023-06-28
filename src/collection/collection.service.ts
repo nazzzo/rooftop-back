@@ -33,6 +33,23 @@ export class CollectionService {
     }
   }
 
+  async getAllCollections(): Promise<Collection[]> {
+    try {
+        const getCollections = await this.collectionModel.find().exec()
+        
+        if(!getCollections){
+            throw new NotFoundException('Collection not found')
+        }
+
+        console.log("service Collections : " , getCollections)
+
+        return getCollections
+      }
+     catch (e) {
+      throw new Error(e);
+    }
+  }
+
   async find(body: CollectionDto): Promise<Collection> {
     try {
       const client = this.configService.get('APP_URL');
