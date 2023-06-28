@@ -6,14 +6,14 @@ import { Collection } from './schemas/collection.schema';
 
 @Controller('collection')
 export class CollectionController {
-  constructor(private collectionService: CollectionService) {}
+    constructor(private collectionService: CollectionService) { }
 
 
     @Get()
-    async getAllCollections():Promise<Collection[]>{
-        try{
+    async getAllCollections(): Promise<Collection[]> {
+        try {
             return await this.collectionService.getAllCollections()
-        }catch(error){
+        } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -26,32 +26,31 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-  }
 
-  @Post('/check')
-  async findCollection(@Body() body) {
-    try {
-      return await this.collectionService.find(body);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
 
-  @Post('/create')
-  async createCollection(
-    @Body() collectionDto: CollectionDto,
-  ): Promise<Collection> {
-    try {
-      return await this.collectionService.create(collectionDto);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.CONFLICT);
+    @Post('/check')
+    async findCollection(@Body() body) {
+        try {
+            return await this.collectionService.find(body);
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
+    @Post('/create')
+    async createCollection(
+        @Body() collectionDto: CollectionDto,
+    ): Promise<Collection> {
+        try {
+            return await this.collectionService.create(collectionDto);
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.CONFLICT);
+        }
+    }
 
     @Put('/update')
-    async updateUser(@Body() updateProps ): Promise<Collection> {
+    async updateUser(@Body() updateProps): Promise<Collection> {
         console.log(updateProps)
         return this.collectionService.update(updateProps)
     }
-
 }
