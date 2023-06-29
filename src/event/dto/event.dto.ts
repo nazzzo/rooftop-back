@@ -27,6 +27,9 @@ export class EventDto {
     @IsNumber()
     readonly price: number;
 
+    @IsString()
+    readonly krwPrice: string;
+
     @IsNotEmpty()
     @IsString()
     readonly event: string;

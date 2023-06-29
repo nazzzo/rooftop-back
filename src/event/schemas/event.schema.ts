@@ -24,6 +24,10 @@ export class Event {
     price: number;
 
     @Prop()
+    krwPrice: string;
+
+
+    @Prop()
     event: string;
 }
 

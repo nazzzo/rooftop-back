@@ -24,7 +24,7 @@ export class CollectionController {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
+  
 
   @Get(':address')
   async getCollection(
