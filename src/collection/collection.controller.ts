@@ -15,7 +15,7 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-  }
+  
 
   @Get(':address')
   async getCollection(
@@ -26,7 +26,7 @@ export class CollectionController {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+}
     @Post('/check')
     async findCollection(@Body() body) {
         try {
@@ -44,9 +44,7 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.CONFLICT);
         }
     }
-  }
-
-
+  
     @Put('/update')
     async updateUser(@Body() updateProps ): Promise<Collection> {
         console.log(updateProps)
