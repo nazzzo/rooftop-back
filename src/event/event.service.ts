@@ -4,10 +4,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Event } from './schemas/event.schema';
 import { EventDto } from './dto/event.dto';
+import { FilterQuery } from 'mongoose';
 
 interface Query {
     time?: number;
     event?: string;
+    from?: string;
 }
 
 @Injectable()
@@ -19,26 +21,23 @@ export class EventService {
     ) { }
 
     async findAll(query: Query) {
-        console.log(query)
+        console.log(query);
         try {
+            const findOptions: FilterQuery<Event> = {};
             if (query.time && query.event) {
                 const currentTime = new Date();
-                const timeAgo = new Date(currentTime.getTime() - query.time * 60 * 60 * 1000); // 1시간
+                const timeAgo = new Date(currentTime.getTime() - query.time * 60 * 60 * 1000);
 
-                const events = await this.eventModel.find({
-                    createdAt: {
-                        $gte: timeAgo,
-                        $lte: currentTime
-                    },
-                    event : query.event
-                }).exec();
-                if (!events || events.length === 0) {
-                    throw new NotFoundException('Event not found');
-                }
-                return events;
+                findOptions.createdAt = {
+                    $gte: timeAgo,
+                    $lte: currentTime
+                };
+                findOptions.event = query.event;
+            } else if (query.from) {
+                findOptions.from = query.from;
             }
 
-            const events = await this.eventModel.find().exec();
+            const events = await this.eventModel.find(findOptions).exec();
             if (!events || events.length === 0) {
                 throw new NotFoundException('Event not found');
             }
@@ -47,6 +46,7 @@ export class EventService {
             throw new Error(e);
         }
     }
+
 
 
     async findById(id) {

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { CollectionModule } from './collection/collection.module';
 import { FileModule } from './file/file.module';
 import { EventModule } from './event/event.module';
+import { CartModule } from './cart/cart.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { EventModule } from './event/event.module';
     CollectionModule,
     FileModule,
     EventModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

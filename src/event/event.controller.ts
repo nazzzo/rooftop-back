@@ -18,6 +18,7 @@ export class EventController {
 
     @Get(':id')
     async getActivity(@Param('id') id: number | string) {
+        console.log(`getActivity :`, id)
         try {
             return await this.eventService.findById(id)
         } catch (error) {
