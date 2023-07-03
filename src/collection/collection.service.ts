@@ -73,6 +73,36 @@ export class CollectionService {
         return newCollection
     }
 
+    async createFollow(address :string , collection_address:string):Promise<Collection>{
+        if(!address) throw new BadRequestException('Your Address is Not Found !')
+
+        const [followDupulicate] = await this.collectionModel.find({
+            address : collection_address
+        })
+
+        console.log("followDupulicate : ", followDupulicate.favorite)
+        
+        if(followDupulicate.favorite.includes(address)){ 
+            // 값이 있으면 ? 그 값을 지운다.
+            const updateCollectionFollow = await this.collectionModel.findOneAndUpdate(
+                { address: collection_address },
+                { $pull: { favorite:address } },
+                {new:true}
+            )
+            console.log('값이 있으면 ? 그값을 지운다. return ' , updateCollectionFollow)
+            return updateCollectionFollow
+        }else{
+            const updateCollectionFollow = await this.collectionModel.findOneAndUpdate(
+                { address: collection_address },
+                { $push : { favorite:address } },
+                {new:true}
+            )
+
+            console.log('값이 없으면 ? 그값을 추가시킨다. return ' , updateCollectionFollow)
+            return updateCollectionFollow
+        }
+    }
+
     async update(updateProps) {
         console.log(`updateProps:`, updateProps);
         const { address, ...updateData } = updateProps;
