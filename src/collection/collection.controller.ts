@@ -26,6 +26,9 @@ export class CollectionController {
         }
     }
 
+  }
+
+
     @Get(':address')
     async getCollection(@Param('address') address: string): Promise<Collection[]> {
         try {
