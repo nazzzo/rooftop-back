@@ -9,6 +9,9 @@ export class Cart {
     shopper: string;
 
     @Prop()
+    seller: string;
+
+    @Prop()
     id: number;
 
     @Prop()

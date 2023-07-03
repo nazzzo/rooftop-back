@@ -15,16 +15,14 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-  }
 
-  @Get(':address')
-  async getCollection(
-    @Param('address') address: string,
-  ): Promise<Collection[]> {
-    try {
-      return await this.collectionService.getCollection(address);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    @Get(':address')
+    async getCollection(@Param('address') address: string): Promise<Collection[]> {
+        try {
+            return await this.collectionService.getCollection(address);
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Post('/check')
@@ -44,13 +42,9 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.CONFLICT);
         }
     }
-  }
-
 
     @Put('/update')
     async updateUser(@Body() updateProps ): Promise<Collection> {
-        console.log(updateProps)
         return this.collectionService.update(updateProps)
     }
-
 }

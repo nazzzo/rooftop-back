@@ -35,6 +35,10 @@ export class CollectionDto {
     totalVolume: number;
 
     @IsNotEmpty()
+    @IsNumber()
+    totalSales: number;
+
+    @IsNotEmpty()
     @IsBoolean()
     verified: boolean;
 

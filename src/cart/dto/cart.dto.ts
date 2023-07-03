@@ -7,6 +7,11 @@ export class CartDto {
     shopper: string;
 
     @IsNotEmpty()
+    @IsString()
+    @Length(42)
+    seller: string;
+
+    @IsNotEmpty()
     @IsNumber()
     id: number;
 
