@@ -9,6 +9,7 @@ import { CollectionModule } from './collection/collection.module';
 import { FileModule } from './file/file.module';
 import { EventModule } from './event/event.module';
 import { CartModule } from './cart/cart.module';
+import { AuctionModule } from './auction/auction.module';
 
 
 @Module({
@@ -28,6 +29,7 @@ import { CartModule } from './cart/cart.module';
     FileModule,
     EventModule,
     CartModule,
+    AuctionModule
   ],
   controllers: [AppController],
   providers: [AppService],
