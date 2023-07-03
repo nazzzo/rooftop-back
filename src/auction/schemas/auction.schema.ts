@@ -8,7 +8,7 @@ export class Auction {
     id: number;
 
     @Prop()
-    endTime: number;
+    endTime: string;
 }
 
 export const AuctionSchema = SchemaFactory.createForClass(Auction)
