@@ -26,6 +26,19 @@ export class EventController {
         }
     }
 
+    @Get('/trade/:address')
+    async getTradeSummary(
+        @Param('address') address: string,
+        @Query() query: ExpressQuery
+        ) {
+        console.log(`tradeSummary :`, address, query)
+        try {
+            return await this.eventService.tradeSummary(address, query)
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Post('/minted')
     async postMinted(@Body() body: EventDto) {
         try {

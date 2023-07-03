@@ -13,13 +13,13 @@ export class CollectionService {
         private collectionModel: mongoose.Model<Collection>,
         private configService: ConfigService
     ) { }
-    
+
 
     async getCollection(address: string): Promise<Collection[]> {
         try {
-            console.log(address)
+            // console.log(address)
             const collection = await this.collectionModel.find({ $or: [{ creator: address }, { address }] });
-            console.log(`get collection:: ${collection}`);
+            // console.log(`get collection:: ${collection}`);
             if (!collection) {
                 throw new NotFoundException('Collection not found');
             }
@@ -32,19 +32,19 @@ export class CollectionService {
     async getAllCollections(): Promise<Collection[]> {
         try {
             const getCollections = await this.collectionModel.find().exec()
-    
-            if(!getCollections){
+
+            if (!getCollections) {
                 throw new NotFoundException('Collection not found')
             }
-    
-            console.log("service Collections : " , getCollections)
-    
+
+            console.log("service Collections : ", getCollections)
+
             return getCollections
-          }
-         catch (e) {
-          throw new Error(e);
         }
-      }
+        catch (e) {
+            throw new Error(e);
+        }
+    }
 
 
     async find(body: CollectionDto): Promise<Collection> {
@@ -74,14 +74,29 @@ export class CollectionService {
     }
 
     async update(updateProps) {
-        const { address, ...updateData } = updateProps
-        console.log(updateProps)
+        console.log(`updateProps:`, updateProps);
+        const { address, ...updateData } = updateProps;
         const collection = await this.collectionModel.findOne({ address });
         if (!collection) {
-            throw  new UnauthorizedException('collection not found')
+          throw new UnauthorizedException('collection not found');
         }
-
-        const updateCollection = await this.collectionModel.findOneAndUpdate({ address: address }, updateData)
-        return updateCollection
+        if (updateProps.totalSales) {
+            updateData.totalSales = collection.totalSales + updateData.totalSales;
+            if (!collection.verified && collection.totalSales >= 5) {
+                updateData.verified = true;
+            }
+          }
+      
+        const updatedCollection = await this.collectionModel.findOneAndUpdate(
+          { address: address },
+          updateData,
+        );
+        return updatedCollection;
+      }
     }
-}
+      
+      
+      
+      
+      
+      

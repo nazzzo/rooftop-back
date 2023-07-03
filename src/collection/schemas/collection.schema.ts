@@ -33,6 +33,9 @@ export class Collection {
     totalVolume: number;
 
     @Prop()
+    totalSales: number;
+
+    @Prop()
     verified: boolean;
 
     @Prop()

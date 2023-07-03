@@ -47,8 +47,6 @@ export class EventService {
         }
     }
 
-
-
     async findById(id) {
         try {
             const events = await this.eventModel.find({ id });
@@ -58,6 +56,38 @@ export class EventService {
             return events
         } catch (e) {
             throw new Error(e)
+        }
+    }
+
+    async tradeSummary(NFTaddress, query) {
+        try {
+            const findOptions: FilterQuery<Event> = {};
+            if (query.time) {
+                const currentTime = new Date();
+                const timeAgo = new Date(currentTime.getTime() - query.time * 60 * 60 * 1000);
+
+                findOptions.createdAt = {
+                    $gte: timeAgo,
+                    $lte: currentTime
+                };
+                findOptions.NFTaddress = NFTaddress;
+            } else {
+                findOptions.NFTaddress = NFTaddress;
+            }
+
+            const events = await this.eventModel.find(findOptions).exec();
+            if (!events || events.length === 0) {
+                throw new NotFoundException('Event not found');
+            }
+
+            let tradeAmount = 0;
+            for (const trade of events) {
+                  tradeAmount += parseFloat(trade.krwPrice);
+              }
+
+            return tradeAmount;
+        } catch (e) {
+            throw new Error(e);
         }
     }
 
