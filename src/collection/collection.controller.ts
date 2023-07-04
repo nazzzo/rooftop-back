@@ -5,10 +5,16 @@ import { Collection } from './schemas/collection.schema';
 import { Query as ExpressQuery } from 'express-serve-static-core';
 
 
+interface FollowCollectionProps{
+    address : string,
+    collection_address : string
+}
+
 @Controller('collection')
 export class CollectionController {
     constructor(private collectionService: CollectionService) { }
 
+    
     @Get()
     async getAllCollections(@Query() query: ExpressQuery):Promise<Collection[]>{
         try{
