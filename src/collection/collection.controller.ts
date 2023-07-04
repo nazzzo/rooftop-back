@@ -17,7 +17,6 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-  
 
     @Get(':address')
     async getCollection(@Param('address') address: string): Promise<Collection[]> {
@@ -35,6 +34,16 @@ export class CollectionController {
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+  
+    @Post('/follow')
+    async followCollection(@Body() data: FollowCollectionProps) {
+      try {
+        const {address,collection_address} = data
+        return await this.collectionService.createFollow(address,collection_address)
+      } catch (error) {
+        throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
 
     @Post('/create')
