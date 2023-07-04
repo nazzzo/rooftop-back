@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 
 interface Query {
     search?: string;
+    favorite?: string;
 }
 
 @Injectable()
@@ -40,6 +41,12 @@ export class CollectionService {
                     .find({ $or: [ { name: keyword }, { description: keyword } ]}).exec();
 
                 return getSearchResult;
+            }
+            if (query.favorite) {
+                const getFavorite = await this.collectionModel
+                    .find({ $or: [ { favorite: query.favorite } ]}).exec();
+
+            return getFavorite;
             }
 
             const getCollections = await this.collectionModel.find().exec()
