@@ -12,7 +12,7 @@ interface FollowCollectionProps{
 
 @Controller('collection')
 export class CollectionController {
-    constructor(private collectionService: CollectionService) { }
+  constructor(private collectionService: CollectionService) {}
 
     
     @Get()
@@ -60,9 +60,10 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.CONFLICT);
         }
     }
-
+  
     @Put('/update')
     async updateUser(@Body() updateProps ): Promise<Collection> {
         return this.collectionService.update(updateProps)
     }
 }
+
