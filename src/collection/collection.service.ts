@@ -1,10 +1,13 @@
-import { BadRequestException, Injectable, NotFoundException, Query, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Collection } from './schemas/collection.schema';
 import { CollectionDto } from './dto/collection.dto';
 import { ConfigService } from '@nestjs/config';
 
+interface Query {
+    search?: string;
+}
 
 @Injectable()
 export class CollectionService {
@@ -29,16 +32,20 @@ export class CollectionService {
         }
     }
 
-    async getAllCollections(): Promise<Collection[]> {
+    async getAllCollections(query: Query): Promise<Collection[]> {
         try {
-            const getCollections = await this.collectionModel.find().exec()
+            if (query.search) {
+                const keyword = new RegExp(query.search, "i"); // 대소문자 구분을 없애는 정규식
+                const getSearchResult = await this.collectionModel
+                    .find({ $or: [ { name: keyword }, { description: keyword } ]}).exec();
 
+                return getSearchResult;
+            }
+
+            const getCollections = await this.collectionModel.find().exec()
             if (!getCollections) {
                 throw new NotFoundException('Collection not found')
             }
-
-            console.log("service Collections : ", getCollections)
-
             return getCollections
         }
         catch (e) {
@@ -54,8 +61,8 @@ export class CollectionService {
             const checkDuplicate = await this.collectionModel.findOne({
                 $or: [{ name }, { symbol }, { url: `${client}/collections/${url}` }],
             });
-            return checkDuplicate
 
+            return checkDuplicate
         } catch (e) {
             throw new Error(e);
         }
@@ -78,25 +85,24 @@ export class CollectionService {
         const { address, ...updateData } = updateProps;
         const collection = await this.collectionModel.findOne({ address });
         if (!collection) {
-          throw new UnauthorizedException('collection not found');
+            throw new UnauthorizedException('collection not found');
         }
         if (updateProps.totalSales) {
             updateData.totalSales = collection.totalSales + updateData.totalSales;
             if (!collection.verified && collection.totalSales >= 5) {
                 updateData.verified = true;
             }
-          }
-      
+        }
+
         const updatedCollection = await this.collectionModel.findOneAndUpdate(
-          { address: address },
-          updateData,
+            { address: address },
+            updateData,
         );
         return updatedCollection;
-      }
     }
-      
-      
-      
-      
-      
-      
+}
+
+
+
+
+

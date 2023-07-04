@@ -42,8 +42,8 @@ export class EventService {
                 throw new NotFoundException('Event not found');
             }
             return events;
-        } catch (e) {
-            throw new Error(e);
+        } catch (error) {
+            throw error;
         }
     }
 
@@ -54,40 +54,46 @@ export class EventService {
                 throw new NotFoundException('대상을 찾지 못했습니다')
             }
             return events
-        } catch (e) {
-            throw new Error(e)
+        } catch (error) {
+            throw error;
         }
     }
 
     async tradeSummary(NFTaddress, query) {
         try {
-            const findOptions: FilterQuery<Event> = {};
-            if (query.time) {
-                const currentTime = new Date();
-                const timeAgo = new Date(currentTime.getTime() - query.time * 60 * 60 * 1000);
+            if (!query.time) return null
+            const currentTime = new Date();
+            const timeAgo = new Date(currentTime.getTime() - query.time * 60 * 60 * 1000);
+            const prevTimeAgo = new Date(currentTime.getTime() - query.time * 2 * 60 * 60 * 1000);
 
-                findOptions.createdAt = {
-                    $gte: timeAgo,
-                    $lte: currentTime
-                };
-                findOptions.NFTaddress = NFTaddress;
-            } else {
-                findOptions.NFTaddress = NFTaddress;
-            }
+            const currentEvents = await this.eventModel.find({ NFTaddress, createdAt: { $gte: timeAgo, $lte: currentTime } }).exec();
+            const prevEvents = await this.eventModel.find({ NFTaddress, createdAt: { $gte: prevTimeAgo, $lte: timeAgo } }).exec();
 
-            const events = await this.eventModel.find(findOptions).exec();
-            if (!events || events.length === 0) {
+            if (!currentEvents || !prevEvents) {
                 throw new NotFoundException('Event not found');
             }
 
-            let tradeAmount = 0;
-            for (const trade of events) {
-                  tradeAmount += parseFloat(trade.krwPrice);
-              }
+            // 거래 총량
+            const currentVolume = currentEvents.reduce((sum, event) => sum + Number(event.krwPrice), 0);
+            const prevVolume = prevEvents.reduce((sum, event) => sum + Number(event.krwPrice), 0);
 
-            return tradeAmount;
-        } catch (e) {
-            throw new Error(e);
+            // 증감비
+            let percentage
+            if (!prevVolume) {
+                percentage = currentVolume * 100
+            } else {
+                percentage = (((currentVolume - prevVolume) / prevVolume) * 100)
+            }
+
+            const result = {
+                currentTradeVolume: currentVolume.toFixed(2),
+                previousTradeVolume: prevVolume.toFixed(2),
+                percentage: percentage.toFixed(0),
+            };
+
+            return result;
+        } catch (error) {
+            throw error;
         }
     }
 
@@ -99,8 +105,8 @@ export class EventService {
             })
             console.log(addEvent)
             return addEvent
-        } catch (e) {
-            throw new Error(e)
+        } catch (error) {
+            throw error;
         }
     }
 }

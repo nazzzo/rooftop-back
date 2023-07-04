@@ -1,28 +1,20 @@
-import {
-    Body,
-    Controller,
-    Get,
-    HttpException,
-    HttpStatus,
-    Param,
-    Post,
-    Put,
-    Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CollectionDto } from './dto/collection.dto';
 import { Collection } from './schemas/collection.schema';
+import { Query as ExpressQuery } from 'express-serve-static-core';
+
 
 @Controller('collection')
 export class CollectionController {
     constructor(private collectionService: CollectionService) { }
 
     @Get()
-    async getAllCollections(): Promise<Collection[]> {
-        try {
-            return await this.collectionService.getAllCollections();
-        } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    async getAllCollections(@Query() query: ExpressQuery):Promise<Collection[]>{
+        try{
+            return await this.collectionService.getAllCollections(query)
+        }catch(error){
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -35,7 +27,6 @@ export class CollectionController {
         }
     }
 
-
     @Post('/check')
     async findCollection(@Body() body) {
         try {
@@ -45,12 +36,8 @@ export class CollectionController {
         }
     }
 
-
-
     @Post('/create')
-    async createCollection(
-        @Body() collectionDto: CollectionDto,
-    ): Promise<Collection> {
+    async createCollection(@Body() collectionDto: CollectionDto): Promise<Collection> {
         try {
             return await this.collectionService.create(collectionDto);
         } catch (error) {
@@ -59,8 +46,7 @@ export class CollectionController {
     }
 
     @Put('/update')
-    async updateUser(@Body() updateProps): Promise<Collection> {
-        // console.log(updateProps);
-        return this.collectionService.update(updateProps);
+    async updateUser(@Body() updateProps ): Promise<Collection> {
+        return this.collectionService.update(updateProps)
     }
 }
