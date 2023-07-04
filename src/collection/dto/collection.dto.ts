@@ -46,6 +46,9 @@ export class CollectionDto {
     @IsString()
     readonly logo: string;
 
+    @IsString({each:true})
+    favorite : string[];
+
     @IsNotEmpty()
     @IsString()
     @Matches(/^[a-z0-9-]+$/)

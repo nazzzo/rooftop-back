@@ -36,6 +36,9 @@ export class Collection {
     totalSales: number;
 
     @Prop()
+    favorite:string[];
+
+    @Prop()
     verified: boolean;
 
     @Prop()
