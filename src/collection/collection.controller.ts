@@ -17,9 +17,7 @@ export class CollectionController {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-
-  }
-
+  
 
     @Get(':address')
     async getCollection(@Param('address') address: string): Promise<Collection[]> {
