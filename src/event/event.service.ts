@@ -90,6 +90,8 @@ export class EventService {
                 previousTradeVolume: prevVolume.toFixed(2),
                 percentage: percentage.toFixed(0),
             };
+            
+            if(result.percentage === undefined) return null
 
             return result;
         } catch (error) {
