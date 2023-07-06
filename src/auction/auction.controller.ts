@@ -26,13 +26,13 @@ export class AuctionController {
         }
     }
 
-    // @Delete(':id')
-    // async deleteAuction(@Param('id') id: number): Promise<string> {
-    //     try {
-    //         await this.auctionService.delete(id)
-    //         return '경매가 종료되었습니다'
-    //     } catch (error) {
-    //         throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
-    //     }
-    // }
+    @Delete(':id')
+    async deleteAuction(@Param('id') id: number): Promise<string> {
+        try {
+            await this.auctionService.delete(id)
+            return '경매가 종료되었습니다'
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 }

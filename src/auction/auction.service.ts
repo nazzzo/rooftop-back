@@ -37,12 +37,12 @@ export class AuctionService {
         }
     }
 
-    // delete(id: number): Promise<void> {
-    //     try {
-    //         await this.auctionModel.deleteOne({ id })
-    //     } catch (e) {
-    //         throw new Error(e);
+    async delete(id: number): Promise<void> {
+        try {
+            await this.auctionModel.deleteOne({ id })
+        } catch (e) {
+            throw new Error(e);
 
-    //     }
-    // }
+        }
+    }
 }
