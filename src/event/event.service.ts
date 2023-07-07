@@ -10,6 +10,7 @@ interface Query {
     time?: number;
     event?: string;
     from?: string;
+    to?:string,
 }
 
 @Injectable()
@@ -33,8 +34,8 @@ export class EventService {
                     $lte: currentTime
                 };
                 findOptions.event = query.event;
-            } else if (query.from) {
-                findOptions.from = query.from;
+            } else if (query.to) {
+                findOptions.to = query.to;
             }
 
             const events = await this.eventModel.find(findOptions).exec();
