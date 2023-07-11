@@ -10,6 +10,7 @@ import { FileModule } from './file/file.module';
 import { EventModule } from './event/event.module';
 import { CartModule } from './cart/cart.module';
 import { AuctionModule } from './auction/auction.module';
+import { AirdropModule } from './airdrop/airdrop.module';
 
 
 @Module({
@@ -29,7 +30,8 @@ import { AuctionModule } from './auction/auction.module';
     FileModule,
     EventModule,
     CartModule,
-    AuctionModule
+    AuctionModule,
+    AirdropModule
   ],
   controllers: [AppController],
   providers: [AppService],

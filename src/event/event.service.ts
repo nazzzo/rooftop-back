@@ -10,6 +10,7 @@ interface Query {
     time?: number;
     event?: string;
     from?: string;
+    to?: string;
 }
 
 @Injectable()
@@ -21,10 +22,11 @@ export class EventService {
     ) { }
 
     async findAll(query: Query) {
-        console.log(query);
+        console.log(`query:`, query);
         try {
             const findOptions: FilterQuery<Event> = {};
-            if (query.time && query.event) {
+
+            if (query.time) {
                 const currentTime = new Date();
                 const timeAgo = new Date(currentTime.getTime() - query.time * 60 * 60 * 1000);
 
@@ -32,9 +34,16 @@ export class EventService {
                     $gte: timeAgo,
                     $lte: currentTime
                 };
+            }
+
+            if (query.event) {
                 findOptions.event = query.event;
-            } else if (query.from) {
+            }
+            if (query.from) {
                 findOptions.from = query.from;
+            }
+            if (query.to) {
+                findOptions.to = query.to;
             }
 
             const events = await this.eventModel.find(findOptions).exec();
@@ -47,6 +56,7 @@ export class EventService {
         }
     }
 
+
     async findById(id) {
         try {
             const events = await this.eventModel.find({ id });
@@ -54,6 +64,46 @@ export class EventService {
                 throw new NotFoundException('대상을 찾지 못했습니다')
             }
             return events
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async eventCount(address) {
+        try {
+            const findOptions: FilterQuery<Event> = {};
+            const currentTime = new Date();
+            const timeAgo = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000);
+
+            findOptions.createdAt = {
+                $gte: timeAgo,
+                $lte: currentTime
+            };
+            findOptions.to = address
+            const events = await this.eventModel.find(findOptions).exec();
+
+            const result = {
+                address: address,
+                transfer: 0,
+                minted: 0,
+                totalPoint: 0,
+              };
+              console.log(result)
+          
+              for (const event of events) {          
+                if (event.event === "transfer") {
+                  result.transfer++;
+                  result.totalPoint += 15;
+                } 
+                if (event.event === "minted") {
+                  result.minted++;
+                  result.totalPoint += 10;
+                }
+              }
+          
+              console.log(`event count: `, result);
+              return result;
+
         } catch (error) {
             throw error;
         }
@@ -90,8 +140,6 @@ export class EventService {
                 previousTradeVolume: prevVolume.toFixed(2),
                 percentage: percentage.toFixed(0),
             };
-            
-            if(result.percentage === undefined) return null
 
             return result;
         } catch (error) {

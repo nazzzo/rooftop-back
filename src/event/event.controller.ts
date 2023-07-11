@@ -25,6 +25,15 @@ export class EventController {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @Get('leaderboard/:address')
+    async getLeaderBoard(@Param('address') address: string) {
+        try {
+            return await this.eventService.eventCount(address)
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @Get('/trade/:address')
     async getTradeSummary(
