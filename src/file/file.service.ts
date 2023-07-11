@@ -11,11 +11,9 @@ export class FileService {
     if (!file) {
       throw new BadRequestException('파일이 존재하지 않습니다.');
     }
+    const apiUrl = this.configService.get('API_URL')
 
-    const host = this.configService.get('HOST')
-    const port = this.configService.get('PORT')
-
-    const fileUrl = `${host}:${port}/${file.filename}`;
+    const fileUrl = `${apiUrl}/${file.filename}`;
 
     return { fileUrl };
   }
