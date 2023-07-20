@@ -1,30 +1,34 @@
-import { Get, Post, Delete, Body, Controller, Req, Put } from '@nestjs/common';
+import { Get, Post, Delete, Body, Controller,HttpException, HttpStatus, Req, Put } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserDto } from './dto/user.dto';
 import { User } from './schemas/user.schema';
-
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth') // 태그 추가
 export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('/sign')
+    @ApiOperation({ summary: 'User sign up or sign in' })
+    @ApiBody({ type: UserDto })
+    @ApiResponse({ status: HttpStatus.OK, description: 'Returns the user token' })
     async login(@Body() userDto: UserDto) {
-        // console.log(userDto)
         return this.authService.login(userDto)
     }
 
     @Put('/update')
+    @ApiOperation({ summary: 'Update user information' })
+    @ApiBody({ type: UserDto })
+    @ApiResponse({ status: HttpStatus.OK, description: 'Returns the updated user' })
     async updateUser(@Body() updateProps: UserDto ): Promise<User> {
         return this.authService.update(updateProps)
     }
 
-    // @Get('/login')
-    // login(@Body() loginDto: UserDto): Promise<{ token: string }> {
-    //     return this.authService.login(loginDto)
-    // }
-
     @Delete('/delete')
+    @ApiOperation({ summary: 'Delete user' })
+    @ApiBody({ type: UserDto })
+    @ApiResponse({ status: HttpStatus.OK, description: 'Returns a success message' })
     async deleteUser(@Body() userProps: UserDto ) {
         return this.authService.deleteById(userProps)
     }

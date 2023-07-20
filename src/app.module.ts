@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BookModule } from './book/book.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { CollectionModule } from './collection/collection.module';
@@ -24,7 +23,6 @@ import { AirdropModule } from './airdrop/airdrop.module';
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }),
-    BookModule,
     AuthModule,
     CollectionModule,
     FileModule,
